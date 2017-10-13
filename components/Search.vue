@@ -108,12 +108,12 @@ export default {
       const labels = this.$sa('.search label')
 
       arrows.forEach((arrow) => {
-        arrow.style.width = '0px'
+        // arrow.style.width = '0px'
         arrow.style.margin = '0'
       })
 
       if (this.$vuetify.breakpoint.xs) {
-        search.style.maxWidth = '350px'
+        search.style.maxWidth = '87.5%'
       }
       option.style.borderColor = '#FFF'
 
