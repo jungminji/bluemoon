@@ -1,0 +1,29 @@
+// Import custom theme
+@require './theme.styl'
+
+// Import Vuetify styling
+@require '~vuetify/src/stylus/main.styl'
+
+@require './post.render.styl'
+
+.page
+  @extend .fade-transition
+
+[v-cloak]
+  display: none
+
+html, body
+  font-family: 'Nanum Square', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Hevetica Neue", sans-serif
+
+.sr-only
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+
+a
+  text-decoration: none

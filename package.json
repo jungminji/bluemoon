@@ -1,0 +1,38 @@
+{
+  "name": "nuxt-final",
+  "version": "1.0.0",
+  "description": "Nuxt.js + Vuetify.js project",
+  "author": "Jungmin Ji <fdev.jm@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "babel-polyfill": "^6.26.0",
+    "js-cookie": "^2.1.4",
+    "jwt-decode": "^2.2.0",
+    "nuxt": "^1.0.0-rc11",
+    "querystring": "^0.2.0",
+    "vue-smoothscroll": "^0.1.1",
+    "vuetify": "^0.16.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-preset-env": "^1.6.0",
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-html": "^3.1.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "pug": "^2.0.0-rc.4",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1"
+  }
+}
