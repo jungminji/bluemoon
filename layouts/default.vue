@@ -24,9 +24,15 @@
       onScroll () {
         if (window.scrollY < 75) {
           this.$eventBus.$emit('toolbar-absolute')
+          if (this.$route.name === 'result') {
+            this.$eventBus.$emit('filter-mobile-absolute')
+          }
         }
         if (window.scrollY >= 75) {
           this.$eventBus.$emit('toolbar-fixed')
+          if (this.$route.name === 'result') {
+            this.$eventBus.$emit('filter-mobile-fixed')
+          }
         }
         if (window.scrollY < 150) {
           this.$eventBus.$emit('scrollToTop-off')
