@@ -17,10 +17,18 @@
       Toolbar,
       ScrollToTop
     },
+    mounted () {
+      this.$vuetify.load(this.init)
+    },
     beforeDestroy () {
       this.$eventBus.$off()
     },
     methods: {
+      init () {
+        if (window.scrollY >= 75) {
+          this.$eventBus.$emit('toolbar-fixed')
+        }
+      },
       onScroll () {
         if (window.scrollY < 75) {
           this.$eventBus.$emit('toolbar-absolute')
