@@ -65,6 +65,7 @@ export default {
       toolbar.style.borderBottom = '1px solid #e6e6e6'
       result.style.padding = '0'
       result.style.paddingTop = getComputedStyle(toolbar, null).getPropertyValue('height')
+      this.$eventBus.$emit('loading-off')
     },
     async loadMore () {
       this.isLoadMore = true

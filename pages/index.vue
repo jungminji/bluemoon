@@ -46,6 +46,11 @@ export default {
       items
     }
   },
+  mounted () {
+    this.$vuetify.load(() => {
+      this.$eventBus.$emit('loading-off')
+    })
+  },
   methods: {
     toNewLab () {
       const newlab = this.$s('#newlab')

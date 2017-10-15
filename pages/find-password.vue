@@ -23,6 +23,9 @@ export default {
     const toolbar = this.$s('.toolbar')
     const container = this.$s('.find-pw-container')
     container.style.paddingTop = getComputedStyle(toolbar, null).height
+    this.$vuetify.load(() => {
+      this.$eventBus.$emit('loading-off')
+    })
   }
 }
 </script>

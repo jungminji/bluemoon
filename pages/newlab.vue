@@ -11,7 +11,6 @@ export default {
     }
   }),
   mounted () {
-    this.$eventBus.$emit('loading-on')
     const iframe = this.$s('iframe')
 
     iframe.onload = () => {

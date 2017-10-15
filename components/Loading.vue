@@ -7,11 +7,15 @@ export default {
   data: () => ({
     loading: false
   }),
+  mounted () {
+    this.$eventBus.$on('loading-off', this.off)
+  },
   methods: {
     start () {
       this.loading = true
     },
-    finish () {
+    finish () {},
+    off () {
       this.loading = false
     }
   }

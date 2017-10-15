@@ -38,6 +38,11 @@ export default {
       }
     }
   }),
+  mounted () {
+    this.$vuetify.load(() => {
+      this.$eventBus.$emit('loading-off')
+    })
+  },
   computed: {
     setMaxWidth () {
       let maxWidth = null

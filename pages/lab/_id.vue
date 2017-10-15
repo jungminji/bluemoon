@@ -29,6 +29,11 @@ export default {
       interview: model
     }
   },
+  mounted () {
+    this.$vuetify.load(() => {
+      this.$eventBus.$emit('loading-off')
+    })
+  },
   computed: {
     getLab () {
       return this.lab ? this.lab : ''
