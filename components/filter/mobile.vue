@@ -13,8 +13,15 @@
           v-btn(flat class="option") 연구별
         v-flex(xs4 class="text-xs-left")
           v-btn(flat class="option") 교수님
-      v-select(label="학교명")
-      v-select(label="학과명")
+
+      v-select(label="학교명" :items="items.institution" v-if="byInstitution" v-model="model.institution")
+      v-select(label="학과명" v-if="byInstitution" v-model="model.department")
+
+      v-select(label="연구 대분류" :items="items.category" v-if="byCategory" v-model="model.category")
+      v-select(label="소분류" v-if="byCategory" v-model="model.subCategory")
+
+      v-select(label="교수님" :items="items.professor" v-if="byProfessor" v-model="model.professor")
+
       v-layout(row wrap)
         v-btn
           v-icon refresh
@@ -27,8 +34,21 @@
 <script>
 export default {
   name: 'filter',
+  props: {
+    items: Object
+  },
   data: () => ({
-    isOpen: false
+    model: {
+      institution: null,
+      department: null,
+      category: null,
+      subCategory: null,
+      professor: null
+    },
+    isOpen: false,
+    byInstitution: true,
+    byCategory: false,
+    byProfessor: false
   }),
   mounted () {
     this.$eventBus.$on('filter-mobile-absolute', this.filterAbs)
@@ -42,8 +62,6 @@ export default {
       filterContainer.style.background = 'transparent'
       filterContainer.style.top = getComputedStyle(toolbar, null).getPropertyValue('height')
       this.isOpen = true
-
-      // Must use next tick. wait for v-if condition to render completely
       this.$nextTick(() => {
         const btns = this.$sa('.option')
         btns.forEach((btn) => {

@@ -2,7 +2,7 @@
   v-container(fluid class="result-container")
     div(class="loading" v-if="isLoadMore")
       v-progress-circular(indeterminate v-bind:size="65" :width="4")
-    MobileFilter(v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm")
+    MobileFilter(v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm" :items="filterItems")
     template(v-for="lab in result")
       Card(:lab="lab")
     v-btn(@click="loadMore" :disabled="isLoadable") 더 보기
@@ -26,13 +26,33 @@ export default {
   }),
   async asyncData ({req, res, query}) {
     const resp = await request({path: `labs/?${queryString.stringify(query)}&offset=0&limit=15`})
+    const items = {
+      institution: [],
+      category: [],
+      professor: null
+    }
+
+    let [resInst, resCat, resProf] = await Promise.all([
+      request({path: 'institutions', req, res}),
+      request({path: 'super-categories', req, res}),
+      request({path: 'professors/names', req, res})
+    ])
+
+    resInst.data.institutions.forEach((inst) => {
+      items.institution.push(inst.name)
+    })
+    resCat.data.superCategories.forEach((cat) => {
+      items.category.push(cat.name)
+    })
+    items.professor = resProf.data.names
     return {
       count: resp.data.count,
       result: resp.data.labs,
       range: {
         from: 15,
         limit: 15
-      }
+      },
+      filterItems: Object.assign({}, items)
     }
   },
   async mounted () {

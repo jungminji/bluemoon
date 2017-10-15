@@ -19,17 +19,14 @@
           v-icon(class="white--text") fa-chevron-left
 
       v-flex(xs10 class="pa-2 slide-container")
-        transition(name="searchSlide")
-          div(class="slide" v-if="by.institution")
-            v-select(label="학교명" :items="items.institution" v-model="institution" :placeholder="placeholder.institution || '전체보기'")
-            v-select(label="학과명" :items="itemsRequested.department" v-model="department" :placeholder="placeholder.department" :disabled="disabled.department")
-        transition(name="searchSlide")
-          div(class="slide" v-if="by.category")
-            v-select(label="연구 대분류" :items="items.category" v-model="category" :placeholder="placeholder.category || '전체보기'")
-            v-select(label="연구 소분류" :items="itemsRequested.subCategory" v-model="subCategory" :placeholder="placeholder.subCategory" :disabled="disabled.subCategory")
-        transition(name="searchSlide")
-          div(class="slide" v-if="by.professor")
-            v-select(label="교수님" :items="items.professor" v-model="professor" :placeholder="placeholder.professor || '전체보기'")
+        div(class="slide" v-if="by.institution")
+          v-select(label="학교명" :items="items.institution" v-model="institution" :placeholder="placeholder.institution || '전체보기'")
+          v-select(label="학과명" :items="itemsRequested.department" v-model="department" :placeholder="placeholder.department" :disabled="disabled.department")
+        div(class="slide" v-if="by.category")
+          v-select(label="연구 대분류" :items="items.category" v-model="category" :placeholder="placeholder.category || '전체보기'")
+          v-select(label="연구 소분류" :items="itemsRequested.subCategory" v-model="subCategory" :placeholder="placeholder.subCategory" :disabled="disabled.subCategory")
+        div(class="slide" v-if="by.professor")
+          v-select(label="교수님" :items="items.professor" v-model="professor" :placeholder="placeholder.professor || '전체보기'")
 
       v-flex(xs1 class="center animation animation-right" @click="toRight")
         v-btn(icon class="arrow arrow-right")
@@ -250,11 +247,6 @@ export default {
       transform: translateX(0px)
     to
       transform: translateX(7.5px)
-
-  .searchSlide-enter-active, .searchSlide-leave-active
-    transition: opacity .15s linear
-  .searchSlide-enter, .searchSlide-leave-to
-    opacity: 0
 
   .search
     padding-top: 80px
