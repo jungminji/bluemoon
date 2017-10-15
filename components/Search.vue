@@ -108,7 +108,6 @@ export default {
       const labels = this.$sa('.search label')
 
       arrows.forEach((arrow) => {
-        // arrow.style.width = '0px'
         arrow.style.margin = '0'
       })
 

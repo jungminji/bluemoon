@@ -1,6 +1,5 @@
 <template lang="pug">
   v-app(v-scroll="onScroll")
-    Loading
     ScrollToTop
     Toolbar(app)
     main
@@ -10,14 +9,12 @@
 </template>
 
 <script>
-  import Toolbar from '~/components/Toolbar.vue'
-  import Loading from '~/components/Loading.vue'
-  import ScrollToTop from '~/components/ScrollToTop.vue'
+  import Toolbar from '~/components/toolbar.vue'
+  import ScrollToTop from '~/components/scrollTop.vue'
 
   export default {
     components: {
       Toolbar,
-      Loading,
       ScrollToTop
     },
     beforeDestroy () {

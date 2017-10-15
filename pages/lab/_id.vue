@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid class="lab-container")
+  v-container(v-cloak fluid class="lab-container")
     pre {{ getLab }}
     pre {{ getInterview }}
 </template>
@@ -8,12 +8,10 @@ import request from '~/assets/request.js'
 
 export default {
   name: 'lab',
-  async asyncData ({req, res, params}) {
+  async asyncData ({req, res, params, redirect}) {
     const { data } = await request({path: `labs/${params.id}`, version: 3})
     const resp = await request({path: `labs/${encodeURIComponent(data.lab.department.institution.name)}/${encodeURIComponent(data.lab.department.name)}/${encodeURIComponent(data.lab.name)}/interviews`})
-
     const model = []
-
     resp.data.interviews.forEach((interview) => {
       interview.interviewQuestions.forEach((question) => {
         const answers = []
@@ -26,15 +24,10 @@ export default {
         })
       })
     })
-
     return {
       lab: data.lab,
       interview: model
     }
-  },
-  mounted () {
-    // Loading is on when selecting a Card from result page
-    this.$eventBus.$emit('loading-off')
   },
   computed: {
     getLab () {

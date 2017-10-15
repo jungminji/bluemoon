@@ -34,7 +34,6 @@ export default {
   },
   methods: {
     selectLab () {
-      this.$eventBus.$emit('loading-on')
       this.$router.push(`lab/${this.lab.uniqueName}`)
     },
     toggleBorder () {

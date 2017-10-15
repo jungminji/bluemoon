@@ -25,13 +25,7 @@ module.exports = {
   css: [
     '~/assets/style/app.styl'
   ],
-  /*
-  ** Customize the progress bar color
-  */
-  loading: { color: 'transparent' },
-  /*
-  ** Build configuration
-  */
+  loading: '~/components/loading.vue',
   build: {
     vendor: [
       'babel-polyfill',

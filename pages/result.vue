@@ -1,5 +1,8 @@
 <template lang="pug">
   v-container(fluid class="result-container")
+    div(class="loading" v-if="isLoadMore")
+      v-progress-circular(indeterminate v-bind:size="65" :width="4")
+    MobileFilter(v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm")
     template(v-for="lab in result")
       Card(:lab="lab")
     v-btn(@click="loadMore" :disabled="isLoadable") 더 보기
@@ -7,26 +10,38 @@
 <script>
 import request from '~/assets/request.js'
 import queryString from 'querystring'
-import Card from '~/components/Card'
+import Card from '~/components/card'
+import MobileFilter from '~/components/filter/mobile.vue'
+import DesktopFilter from '~/components/filter/desktop.vue'
 
 export default {
   name: 'result',
   components: {
+    MobileFilter,
+    DesktopFilter,
     Card
   },
   data: () => ({
-    result: null,
-    count: 0,
-    range: {
-      from: 0,
-      limit: 15
-    }
+    isLoadMore: false
   }),
+  async asyncData ({req, res, query}) {
+    const resp = await request({path: `labs/?${queryString.stringify(query)}&offset=0&limit=15`})
+    return {
+      count: resp.data.count,
+      result: resp.data.labs,
+      range: {
+        from: 15,
+        limit: 15
+      }
+    }
+  },
   async mounted () {
-    this.$eventBus.$emit('loading-on')
-    this.result = await this.requestLabs(this.range.from, this.range.limit)
-    this.updateRange(this.range.from, this.range.limit)
-    this.$eventBus.$emit('loading-off')
+    await this.$vuetify.load(this.init)
+  },
+  beforeDestroy () {
+    const toolbar = this.$s('.toolbar')
+    toolbar.style.boxShadow = '0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)'
+    toolbar.style.border = '0 none'
   },
   computed: {
     getResult () {
@@ -43,17 +58,22 @@ export default {
     }
   },
   methods: {
-    async requestLabs (from, limit) {
-      const {data} = await request({path: `labs/?${queryString.stringify(this.$route.query)}&offset=${from}&limit=${limit}`})
-      this.count = data.count
-      return data.labs
+    init () {
+      const toolbar = this.$s('.toolbar')
+      const result = this.$s('.result-container')
+      toolbar.style.boxShadow = 'none'
+      toolbar.style.borderBottom = '1px solid #e6e6e6'
+      result.style.padding = '0'
+      result.style.paddingTop = getComputedStyle(toolbar, null).getPropertyValue('height')
     },
     async loadMore () {
-      const data = await this.requestLabs(this.range.from, this.range.limit)
-      data.forEach((lab) => {
+      this.isLoadMore = true
+      const resp = await request({path: `labs/?${queryString.stringify(this.$route.query)}&offset=${this.range.from}&limit=${this.range.limit}`})
+      resp.data.labs.forEach((lab) => {
         this.result.push(lab)
       })
       this.updateRange(this.range.from, this.range.limit)
+      this.isLoadMore = false
     },
     updateRange (from, limit) {
       this.$set(this.range, 'from', from + limit)
@@ -61,9 +81,3 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
-  .result-container
-    padding: 0
-    padding-top: 100px
-</style>
-

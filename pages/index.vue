@@ -15,7 +15,7 @@
 </template>
 <script>
 import request from '~/assets/request.js'
-import Search from '~/components/Search'
+import Search from '~/components/search'
 
 export default {
   components: {
