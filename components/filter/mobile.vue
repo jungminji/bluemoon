@@ -38,16 +38,13 @@ export default {
     open () {
       const toolbar = this.$s('.toolbar')
       const filterContainer = this.$s('.filter-container')
-      // const body = this.$s('body')
       filterContainer.style.position = 'fixed'
       filterContainer.style.background = 'transparent'
       filterContainer.style.top = getComputedStyle(toolbar, null).getPropertyValue('height')
-      // body.style.overflowY = 'hidden'
       this.isOpen = true
     },
     close () {
       const filterContainer = this.$s('.filter-container')
-      // const body = this.$s('body')
       this.isOpen = false
       filterContainer.style.background = '#FFF'
       if (window.scrollY >= 75) {
@@ -56,7 +53,6 @@ export default {
       }
       filterContainer.style.position = 'static'
       filterContainer.style.top = 'auto'
-      // body.style.overflowY = 'visible'
     },
     filterAbs () {
       const filterContainer = this.$s('.filter-container')
