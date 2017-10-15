@@ -8,18 +8,18 @@
         v-icon fa-times
       v-layout(row wrap)
         v-flex(xs4 class="text-xs-right")
-          v-btn 학교별
+          v-btn(flat class="option") 학교별
         v-flex(xs4 class="text-xs-center")
-          v-btn 연구별
+          v-btn(flat class="option") 연구별
         v-flex(xs4 class="text-xs-left")
-          v-btn 교수님
+          v-btn(flat class="option") 교수님
       v-select(label="학교명")
       v-select(label="학과명")
       v-layout(row wrap)
         v-btn
           v-icon refresh
           span 초기화
-        v-btn(primary)
+        v-btn(color="primary")
           v-icon search
           span 지금 찾기
     v-layout(class="cover-result" v-if="isOpen")        
@@ -42,6 +42,26 @@ export default {
       filterContainer.style.background = 'transparent'
       filterContainer.style.top = getComputedStyle(toolbar, null).getPropertyValue('height')
       this.isOpen = true
+
+      // Must use next tick. wait for v-if condition to render completely
+      this.$nextTick(() => {
+        const btns = this.$sa('.option')
+        btns.forEach((btn) => {
+          btn.style.borderRadius = '0'
+          btn.style.color = '#616161'
+        })
+        const query = this.$route.query
+        const style = '2px solid #616161'
+        if (query.superCategory) {
+          btns[1].style.borderBottom = style
+        }
+        if (query.institution || Object.keys(query).length === 0) {
+          btns[0].style.borderBottom = style
+        }
+        if (query.professor) {
+          btns[2].style.borderBottom = style
+        }
+      })
     },
     close () {
       const filterContainer = this.$s('.filter-container')

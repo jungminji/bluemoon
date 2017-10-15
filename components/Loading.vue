@@ -1,6 +1,6 @@
 <template lang="pug">
   div(class="loading" v-if="loading")
-    v-progress-circular(indeterminate v-bind:size="65" :width="4")
+    v-progress-circular(indeterminate color="primary" v-bind:size="65" :width="4")
 </template>
 <script>
 export default {

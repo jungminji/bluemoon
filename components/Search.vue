@@ -227,7 +227,11 @@ export default {
         department: this.department,
         professor: this.professor
       }
-      this.$router.push(`/result?${queryString.stringify(data)}`)
+      if (data.superCategory || data.institution || data.professor) {
+        this.$router.push(`/result?${queryString.stringify(data)}`)
+      } else {
+        this.$router.push('/result')
+      }
     }
   }
 }
