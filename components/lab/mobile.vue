@@ -1,10 +1,10 @@
 <template lang="pug">
-  div(class="pa-0")
+  div(class="pa-0" v-scroll="onScroll")
     v-layout(column justify-center class="color-primary")
       h2(class="inst-dep") {{ lab.department.institution.name }} {{ lab.department.name }}
       h1(class="lab-name") {{ lab.name }}
       h2(class="lab-professor") {{ lab.professors[0].korFullName }} 교수님
-    v-layout(row wrap class="tools" :style="getToolsStyle")
+    v-layout(row wrap class="tools")
       v-flex(xs7 class="flex-center")
         span(class="views") {{ lab.views }} Views
         span 북마크 {{ lab.numLikers }}
@@ -31,38 +31,33 @@
 export default {
   name: 'lab-mobile-view',
   props: ['lab', 'interview'],
-  data: () => ({
-    toolsStyle: {
-      position: null,
-      top: null,
-      left: null,
-      right: null
-    }
-  }),
   mounted () {
-    this.$eventBus.$on('tools-mobile-absolute', this.toolsAbs)
-    this.$eventBus.$on('tools-mobile-fixed', this.toolsFixed)
+    this.$vuetify.load(this.init)
   },
   computed: {
     getCategories () {
       return this.lab.categories.length ? this.lab.categories : false
-    },
-    getToolsStyle () {
-      return this.toolsStyle
     }
   },
   methods: {
+    init () {
+      if (window.scrollY >= 100) {
+        this.toolsFixed()
+      }
+    },
+    onScroll () {
+      if (window.scrollY < 100) {
+        this.toolsAbs()
+      }
+      if (window.scrollY >= 100) {
+        this.toolsFixed()
+      }
+    },
     toolsAbs () {
-      this.toolsStyle.position = null
-      this.toolsStyle.top = null
-      this.toolsStyle.left = null
-      this.toolsStyle.right = null
+      this.$removeClass(this.$s('.tools'), 'fixed')
     },
     toolsFixed () {
-      this.toolsStyle.position = 'fixed'
-      this.toolsStyle.top = getComputedStyle(this.$s('.toolbar'), null).getPropertyValue('height')
-      this.toolsStyle.left = '0'
-      this.toolsStyle.right = '0'
+      this.$addClass(this.$s('.tools'), 'fixed')
     }
   }
 }
@@ -90,6 +85,11 @@ export default {
     padding: 5px 0
     margin-bottom: 40px
     box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.16), 0 2px 3px 0 rgba(0, 0, 0, 0.26)
+    &.fixed
+      position: fixed
+      left: 0
+      right: 0
+      top: 57px
     & .flex-center
       display: flex
       justify-content: flex-start

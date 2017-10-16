@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid :style="getFilterStyle" class="filter-container pa-0")
+  v-container(fluid class="filter__container pa-0" v-scroll="onScroll")
     v-layout(justify-center class="pt-3 pb-3" v-if="!isOpen" @click="open" transition="fade-transition")
       v-icon search
       span 검색
@@ -8,11 +8,11 @@
         v-icon fa-times
       v-layout(row wrap)
         v-flex(xs4 class="text-xs-right")
-          v-btn(flat class="option" @click="changeBtnStyle(0); byInstitution = true; byCategory = false; byProfessor = false") 학교별
+          v-btn(flat class="btn__option" @click="changeBtnStyle(0); byInstitution = true; byCategory = false; byProfessor = false") 학교별
         v-flex(xs4 class="text-xs-center")
-          v-btn(flat class="option" @click="changeBtnStyle(1); byInstitution = false; byCategory = true; byProfessor = false") 연구별
+          v-btn(flat class="btn__option" @click="changeBtnStyle(1); byInstitution = false; byCategory = true; byProfessor = false") 연구별
         v-flex(xs4 class="text-xs-left")
-          v-btn(flat class="option" @click="changeBtnStyle(2); byInstitution = false; byCategory = false; byProfessor = true") 교수님
+          v-btn(flat class="btn__option" @click="changeBtnStyle(2); byInstitution = false; byCategory = false; byProfessor = true") 교수님
 
       v-select(label="학교명" :items="items.institution" v-if="byInstitution" v-model="model.institution" :placeholder="placeholder.institution")
       v-select(label="학과명" :items="subItems.department" v-if="byInstitution" v-model="model.department" :placeholder="placeholder.department" :disabled="disableDepartment")
@@ -62,15 +62,10 @@ export default {
     isOpen: false,
     byInstitution: true,
     byCategory: false,
-    byProfessor: false,
-    filterStyle: {
-      position: null,
-      top: null
-    }
+    byProfessor: false
   }),
   mounted () {
-    this.$eventBus.$on('filter-mobile-absolute', this.filterAbs)
-    this.$eventBus.$on('filter-mobile-fixed', this.filterFixed)
+    this.$vuetify.load(this.init)
   },
   computed: {
     disableSubCategory () {
@@ -88,9 +83,6 @@ export default {
       } else {
         return false
       }
-    },
-    getFilterStyle () {
-      return this.filterStyle
     }
   },
   watch: {
@@ -148,12 +140,24 @@ export default {
     }
   },
   methods: {
+    init () {
+      if (window.scrollY >= 100) {
+        this.filterFixed()
+      }
+    },
+    onScroll () {
+      if (window.scrollY < 100) {
+        this.filterAbs()
+      }
+      if (window.scrollY >= 100) {
+        this.filterFixed()
+      }
+    },
     changeBtnStyle (n) {
-      const btns = this.$sa('.option')
-      btns.forEach((btn) => {
-        btn.style.borderColor = 'transparent'
+      this.$sa('.btn__option').forEach((el) => {
+        this.$removeClass(el, 'active')
       })
-      btns[n].style.borderColor = '#616161'
+      this.$addClass(this.$sa('.btn__option')[n], 'active')
     },
     async initValue () {
       const query = this.$route.query
@@ -206,37 +210,25 @@ export default {
       })
     },
     open () {
-      const toolbar = this.$s('.toolbar')
-      const filterContainer = this.$s('.filter-container')
-      filterContainer.style.position = 'fixed'
-      filterContainer.style.background = 'transparent'
-      filterContainer.style.top = getComputedStyle(toolbar, null).getPropertyValue('height')
       this.isOpen = true
       this.$nextTick(() => {
-        const btns = this.$sa('.option')
-        btns.forEach((btn) => {
-          btn.style.borderRadius = '0'
-          btn.style.color = '#616161'
-          btn.style.borderBottom = '2px solid transparent'
-        })
         const query = this.$route.query
-        const style = '2px solid #616161'
+        this.$addClass(this.$s('.filter__container'), 'active')
         if (query.superCategory) {
-          btns[1].style.borderBottom = style
+          this.$addClass(this.$sa('.btn__option')[1], 'active')
         }
         if (query.institution || Object.keys(query).length === 0) {
-          btns[0].style.borderBottom = style
+          this.$addClass(this.$sa('.btn__option')[0], 'active')
         }
         if (query.professor) {
-          btns[2].style.borderBottom = style
+          this.$addClass(this.$sa('.btn__option')[2], 'active')
         }
       })
       this.initValue()
     },
     close () {
-      const filterContainer = this.$s('.filter-container')
       this.isOpen = false
-      filterContainer.style.background = '#FFF'
+      this.$removeClass(this.$s('.filter__container'), 'active')
       if (window.scrollY >= 75) {
         this.filterFixed()
         return
@@ -244,11 +236,10 @@ export default {
       this.filterAbs()
     },
     filterAbs () {
-      this.filterStyle.position = null
-      this.filterStyle.top = null
+      this.$removeClass(this.$s('.filter__container'), 'fixed')
     },
     filterFixed () {
-      this.filterStyle.position = 'fixed'
+      this.$addClass(this.$s('.filter__container'), 'fixed')
     },
     reset () {
       const model = this.model
@@ -283,15 +274,27 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-  .filter-container
+  .filter__container
     cursor: pointer
     background: #FFF
     box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.16), 0 2px 3px 0 rgba(0, 0, 0, 0.26)
     z-index: 20
+    &.fixed
+      position: fixed
+    &.active
+      position: fixed
+      background: transparent
+      top: 57px
   .filter
     background: #FFF
   .cover-result
     height: 100vh
     background: rgba(#000, 0.7)
+  .btn__option
+    color: #616161
+    border-radius: 0
+    border-bottom: 2px solid transparent
+    &.active
+      border-color: #616161
 </style>
 

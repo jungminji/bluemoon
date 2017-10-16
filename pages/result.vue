@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid class="result__container" :style="getContainerStyle")
+  v-container(fluid class="result__container pa-0")
     div(class="loading" v-if="isLoadMore")
       v-progress-circular(indeterminate v-bind:size="65" :width="4")
     MobileFilter(v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm" :items="filterItems")
@@ -23,13 +23,7 @@ export default {
     Card
   },
   data: () => ({
-    isLoadMore: false,
-    containerStyle: {
-      paddingTop: '0',
-      paddingBottom: '0',
-      paddingRight: '0',
-      paddingLeft: '0'
-    }
+    isLoadMore: false
   }),
   async asyncData ({req, res, query}) {
     const resp = await request({path: `labs/?${queryString.stringify(query)}&offset=0&limit=15`})
@@ -79,9 +73,6 @@ export default {
       } else {
         return false
       }
-    },
-    getContainerStyle () {
-      return this.containerStyle
     }
   },
   methods: {

@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container(fluid v-cloak class="lab__container pa-0")
     Mobile(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm")
-    Desktop(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.md || $vuetify.breakpoint.lg || $vuetify.breakpoint.xl")
+    //- Desktop(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.md || $vuetify.breakpoint.lg || $vuetify.breakpoint.xl")
 </template>
 <script>
 import Mobile from '~/components/lab/mobile'
@@ -36,7 +36,6 @@ export default {
     }
   },
   mounted () {
-    // await this.$vuetify.load(this.init)
     this.$eventBus.$emit('toolbar-noBoxShadow')
     this.$eventBus.$emit('loading-off')
   },

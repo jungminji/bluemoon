@@ -9,10 +9,15 @@ export default {
     show: false
   }),
   mounted () {
+    this.$vuetify.load(this.init)
     this.$eventBus.$on('scrollToTop-on', this.showBtn)
     this.$eventBus.$on('scrollToTop-off', this.hideBtn)
   },
   methods: {
+    init () {
+      this.$eventBus.$emit('scrollToTop-on', this.showBtn)
+      this.$eventBus.$emit('scrollToTop-off', this.hideBtn)
+    },
     scrollToTop () {
       this.$SmoothScroll(0)
     },
