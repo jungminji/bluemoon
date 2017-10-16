@@ -15,10 +15,10 @@
           v-btn(flat class="option" @click="changeBtnStyle(2); byInstitution = false; byCategory = false; byProfessor = true") 교수님
 
       v-select(label="학교명" :items="items.institution" v-if="byInstitution" v-model="model.institution" :placeholder="placeholder.institution")
-      v-select(label="학과명" v-if="byInstitution" v-model="model.department" :placeholder="placeholder.department")
+      v-select(label="학과명" :items="subItems.department" v-if="byInstitution" v-model="model.department" :placeholder="placeholder.department" :disabled="disableDepartment")
 
       v-select(label="연구 대분류" :items="items.category" v-if="byCategory" v-model="model.category" :placeholder="placeholder.category")
-      v-select(label="소분류" v-if="byCategory" v-model="model.subCategory" :placeholder="placeholder.subCategory")
+      v-select(label="소분류" :items="subItems.subCategory" v-if="byCategory" v-model="model.subCategory" :placeholder="placeholder.subCategory" :disabled="disableSubCategory")
 
       v-select(label="교수님" :items="items.professor" v-if="byProfessor" v-model="model.professor" :placeholder="placeholder.professor")
 
@@ -26,12 +26,15 @@
         v-btn(@click="reset")
           v-icon refresh
           span 초기화
-        v-btn(color="primary")
+        v-btn(@click="submit" color="primary")
           v-icon search
           span 지금 찾기
     v-layout(class="cover-result" v-if="isOpen")        
 </template>
 <script>
+import request from '~/assets/request.js'
+import queryString from 'querystring'
+
 export default {
   name: 'filter',
   props: {
@@ -52,6 +55,10 @@ export default {
       subCategory: null,
       professor: null
     },
+    subItems: {
+      subCategory: [],
+      department: []
+    },
     isOpen: false,
     byInstitution: true,
     byCategory: false,
@@ -61,6 +68,78 @@ export default {
     this.$eventBus.$on('filter-mobile-absolute', this.filterAbs)
     this.$eventBus.$on('filter-mobile-fixed', this.filterFixed)
   },
+  computed: {
+    disableSubCategory () {
+      if (!this.model.category) {
+        this.placeholder.subCategory = '대분류를 선택해주세요.'
+        return true
+      } else {
+        return false
+      }
+    },
+    disableDepartment () {
+      if (!this.model.institution) {
+        this.placeholder.department = '학교명을 선택해주세요.'
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  watch: {
+    async 'model.institution' (newValue, oldValue) {
+      const model = this.model
+      const ph = this.placeholder
+      if (newValue) {
+        for (let key in model) {
+          if (model.hasOwnProperty(key) && key !== 'institution') {
+            model[key] = null
+          }
+        }
+        for (let key in ph) {
+          if (ph.hasOwnProperty(key) && key !== 'institution') {
+            ph[key] = null
+          }
+        }
+        await this.requestDepartment(newValue)
+        this.$set(this.subItems, 'subCategory', [])
+      }
+    },
+    async 'model.category' (newValue, oldValue) {
+      const model = this.model
+      const ph = this.placeholder
+      if (newValue) {
+        for (let key in model) {
+          if (model.hasOwnProperty(key) && key !== 'category') {
+            model[key] = null
+          }
+        }
+        for (let key in ph) {
+          if (ph.hasOwnProperty(key) && key !== 'category') {
+            ph[key] = null
+          }
+        }
+        await this.requestSubCategory(newValue)
+        this.$set(this.subItems, 'department', [])
+      }
+    },
+    'model.professor' (newValue, oldValue) {
+      const model = this.model
+      const ph = this.placeholder
+      if (newValue) {
+        for (let key in model) {
+          if (model.hasOwnProperty(key) && key !== 'professor') {
+            model[key] = null
+          }
+        }
+        for (let key in ph) {
+          if (ph.hasOwnProperty(key) && key !== 'professor') {
+            ph[key] = null
+          }
+        }
+      }
+    }
+  },
   methods: {
     changeBtnStyle (n) {
       const btns = this.$sa('.option')
@@ -69,7 +148,7 @@ export default {
       })
       btns[n].style.borderColor = '#616161'
     },
-    initValue () {
+    async initValue () {
       const query = this.$route.query
       const model = this.model
       const ph = this.placeholder
@@ -79,6 +158,7 @@ export default {
         this.byProfessor = false
         model.category = query.superCategory
         ph.category = query.superCategory
+        await this.requestSubCategory(query.superCategory)
         if (query.category) {
           model.subCategory = query.category
           ph.subCategory = query.category
@@ -90,6 +170,7 @@ export default {
         this.byProfessor = false
         model.institution = query.institution
         ph.institution = query.institution
+        await this.requestDepartment(query.institution)
         if (query.department) {
           model.department = query.department
           ph.department = query.department
@@ -102,6 +183,20 @@ export default {
         model.professor = query.professor
         ph.professor = query.professor
       }
+    },
+    async requestDepartment (institution) {
+      this.$set(this.subItems, 'department', [])
+      let { data } = await request({path: `institutions/${encodeURIComponent(institution)}/departments`})
+      data.departments.forEach((dep) => {
+        this.subItems.department.push(dep.name)
+      })
+    },
+    async requestSubCategory (category) {
+      this.$set(this.subItems, 'subCategory', [])
+      let { data } = await request({path: `super-categories/${encodeURIComponent(category)}/categories`})
+      data.categories.forEach((cat) => {
+        this.subItems.subCategory.push(cat.name)
+      })
     },
     open () {
       const toolbar = this.$s('.toolbar')
@@ -164,6 +259,21 @@ export default {
         if (ph.hasOwnProperty(key)) {
           ph[key] = null
         }
+      }
+    },
+    submit () {
+      const model = this.model
+      const data = {
+        superCategory: model.category,
+        category: model.subCategory,
+        institution: model.institution,
+        department: model.department,
+        professor: model.professor
+      }
+      if (data.superCategory || data.institution || data.professor) {
+        this.$router.push(`/result?${queryString.stringify(data)}`)
+      } else {
+        alert('검색 조건을 선택해주세요!')
       }
     }
   }

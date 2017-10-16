@@ -45,6 +45,7 @@ export default {
       items.category.push(cat.name)
     })
     items.professor = resProf.data.names
+
     return {
       count: resp.data.count,
       result: resp.data.labs,
