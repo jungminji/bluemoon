@@ -17,20 +17,15 @@
       Toolbar,
       ScrollToTop
     },
-    mounted () {
-      this.$vuetify.load(this.init)
-    },
     beforeDestroy () {
-      this.$eventBus.$off()
+      this.$eventBus.$off('filter-mobile-absolute')
+      this.$eventBus.$off('filter-mobile-fixed')
+      this.$eventBus.$off('tools-mobile-absolute')
+      this.$eventBus.$off('tools-mobile-fixed')
     },
     methods: {
-      init () {
-        if (window.scrollY >= 75) {
-          this.$eventBus.$emit('toolbar-fixed')
-        }
-      },
       onScroll () {
-        if (window.scrollY < 75) {
+        if (window.scrollY < 100) {
           this.$eventBus.$emit('toolbar-absolute')
           if (this.$route.name === 'result') {
             this.$eventBus.$emit('filter-mobile-absolute')
@@ -39,7 +34,7 @@
             this.$eventBus.$emit('tools-mobile-absolute')
           }
         }
-        if (window.scrollY >= 75) {
+        if (window.scrollY >= 100) {
           this.$eventBus.$emit('toolbar-fixed')
           if (this.$route.name === 'result') {
             this.$eventBus.$emit('filter-mobile-fixed')
@@ -58,3 +53,4 @@
     }
   }
 </script>
+

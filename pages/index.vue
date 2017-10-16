@@ -47,14 +47,12 @@ export default {
     }
   },
   mounted () {
-    this.$vuetify.load(() => {
-      this.$eventBus.$emit('loading-off')
-    })
+    this.$eventBus.$emit('toolbar-boxShadow')
+    this.$eventBus.$emit('loading-off')
   },
   methods: {
     toNewLab () {
-      const newlab = this.$s('#newlab')
-      this.$SmoothScroll(newlab)
+      this.$SmoothScroll(this.$s('#newlab'))
     },
     toTop () {
       this.$SmoothScroll(0)

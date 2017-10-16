@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid class="search")
+  v-container(fluid class="search__container")
     h1(class="sr-only") 연구소 검색 도구
     v-layout(row justify-center)
       h2(class="search-welcome") 다양한 방법으로&nbsp;
@@ -7,11 +7,11 @@
         | &nbsp;을 찾아보세요!
     v-layout(row)
       v-flex(xs4 class="text-xs-right")
-        v-btn(flat class="option" :ripple="false" @click="searchBy(0)") 학교별
+        v-btn(flat class="btn__option" :ripple="false" @click="searchBy(0)") 학교별
       v-flex(xs4 class="text-xs-center pl-2 pr-2")
-        v-btn(flat class="option" :ripple="false" @click="searchBy(1)") 분야별
-      v-flex(xs4 class="text-xs-left")
-        v-btn(flat class="option" :ripple="false" @click="searchBy(2)") 교수님
+        v-btn(flat class="btn__option" :ripple="false" @click="searchBy(1)") 분야별
+      v-flex(xs4 class="btn__text-xs-left")
+        v-btn(flat class="btn__option" :ripple="false" @click="searchBy(2)") 교수님
 
     v-layout(row wrap)
       v-flex(xs1 class="center animation animation-left" @click="toLeft")
@@ -99,22 +99,10 @@ export default {
   },
   methods: {
     init () {
-      const search = this.$s('.search')
-      const arrows = this.$sa('.arrow')
-      const option = this.$s('.option')
-      const labels = this.$sa('.search label')
-
-      arrows.forEach((arrow) => {
-        arrow.style.margin = '0'
-      })
-
-      if (this.$vuetify.breakpoint.xs) {
-        search.style.maxWidth = '87.5%'
-      }
-      option.style.borderColor = '#FFF'
-
+      const labels = this.$sa('.search__container label')
+      this.$addClass(this.$sa('.btn__option')[0], 'white__border__bottom')
       labels.forEach((label) => {
-        label.style.color = '#616161'
+        this.$addClass(label, 'label__text__color')
       })
     },
     toLeft () {
@@ -156,15 +144,15 @@ export default {
       }
     },
     searchBy (n) {
-      const options = this.$sa('.option')
+      const btns = this.$sa('.btn__option')
       const by = this.by
 
       this.reset()
 
-      options.forEach((opt) => {
-        opt.style.borderColor = 'transparent'
+      btns.forEach((btn) => {
+        this.$removeClass(btn, 'white__border__bottom')
       })
-      options[n].style.borderColor = '#FFF'
+      this.$addClass(btns[n], 'white__border__bottom')
 
       if (n === 0) {
         by.institution = true
@@ -248,17 +236,23 @@ export default {
     to
       transform: translateX(7.5px)
 
-  .search
+  .search__container
     padding-top: 80px
     max-width: 50%
     flex: none
-    & .option
+    & .btn__option
       min-width: auto
       color: #FFF
       margin: 0
       font-size: 1.15rem
       font-weight: 600
       border-bottom: 1.5px solid transparent
+      &.white__border__bottom
+        border-color: #FFF
+    @media (max-width: 600px)
+      max-width: 87.5%
+    & .label__text__color
+      color: #616161 !important
 
   .search-welcome
     color: #FFF

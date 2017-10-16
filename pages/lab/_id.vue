@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid v-cloak class="lab")
+  v-container(fluid v-cloak class="lab__container pa-0")
     Mobile(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm")
     Desktop(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.md || $vuetify.breakpoint.lg || $vuetify.breakpoint.xl")
 </template>
@@ -36,13 +36,9 @@ export default {
     }
   },
   mounted () {
-    this.$vuetify.load(() => {
-      this.$eventBus.$emit('loading-off')
-      const toolbar = this.$s('.toolbar')
-      const lab = this.$s('.lab')
-      lab.style.padding = '0'
-      lab.style.paddingTop = getComputedStyle(toolbar, null).getPropertyValue('height')
-    })
+    // await this.$vuetify.load(this.init)
+    this.$eventBus.$emit('toolbar-noBoxShadow')
+    this.$eventBus.$emit('loading-off')
   },
   computed: {
     getLab () {
@@ -54,4 +50,8 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+.lab__container
+  margin-top: 57px
+</style>
 

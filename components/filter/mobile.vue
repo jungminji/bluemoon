@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container(fluid class="filter-container pa-0")
+  v-container(fluid :style="getFilterStyle" class="filter-container pa-0")
     v-layout(justify-center class="pt-3 pb-3" v-if="!isOpen" @click="open" transition="fade-transition")
       v-icon search
       span 검색
@@ -62,7 +62,11 @@ export default {
     isOpen: false,
     byInstitution: true,
     byCategory: false,
-    byProfessor: false
+    byProfessor: false,
+    filterStyle: {
+      position: null,
+      top: null
+    }
   }),
   mounted () {
     this.$eventBus.$on('filter-mobile-absolute', this.filterAbs)
@@ -84,6 +88,9 @@ export default {
       } else {
         return false
       }
+    },
+    getFilterStyle () {
+      return this.filterStyle
     }
   },
   watch: {
@@ -234,18 +241,14 @@ export default {
         this.filterFixed()
         return
       }
-      filterContainer.style.position = 'static'
-      filterContainer.style.top = 'auto'
+      this.filterAbs()
     },
     filterAbs () {
-      const filterContainer = this.$s('.filter-container')
-      filterContainer.style.position = 'static'
+      this.filterStyle.position = null
+      this.filterStyle.top = null
     },
     filterFixed () {
-      const toolbar = this.$s('.toolbar')
-      const filterContainer = this.$s('.filter-container')
-      filterContainer.style.position = 'fixed'
-      filterContainer.style.top = getComputedStyle(toolbar, null).getPropertyValue('height')
+      this.filterStyle.position = 'fixed'
     },
     reset () {
       const model = this.model

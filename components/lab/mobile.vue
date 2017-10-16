@@ -4,13 +4,13 @@
       h2(class="inst-dep") {{ lab.department.institution.name }} {{ lab.department.name }}
       h1(class="lab-name") {{ lab.name }}
       h2(class="lab-professor") {{ lab.professors[0].korFullName }} 교수님
-    v-layout(row wrap class="tools")
+    v-layout(row wrap class="tools" :style="getToolsStyle")
       v-flex(xs7 class="flex-center")
-        span {{ lab.views }} Views
+        span(class="views") {{ lab.views }} Views
         span 북마크 {{ lab.numLikers }}
-        v-icon(color="error") bookmark_border
+        v-icon(color="error" class="bookmark") bookmark_border
       v-flex(xs5 class="text-xs-right")
-        v-btn(color="primary") 컨택하기
+        v-btn(color="primary" class="contact-btn") 컨택하기
     v-layout(column class="contents")
       h1(class="contents-header") 랩 간단 요약
       p(class="contents-p") {{ lab.description || '해당 정보가 존재하지 않습니다.' }}
@@ -20,7 +20,7 @@
         p(class="contents-p") {{ n.answer }}
       template(v-if="!interview.length")
         p(class="contents-p") 인터뷰 정보가 없습니다.
-    v-layout(row wrap)
+    v-layout(row wrap class="categories")
       template(v-for="n in getCategories")
         span {{ n.superCategory.name }}
         span {{ n.name }}
@@ -31,6 +31,14 @@
 export default {
   name: 'lab-mobile-view',
   props: ['lab', 'interview'],
+  data: () => ({
+    toolsStyle: {
+      position: null,
+      top: null,
+      left: null,
+      right: null
+    }
+  }),
   mounted () {
     this.$eventBus.$on('tools-mobile-absolute', this.toolsAbs)
     this.$eventBus.$on('tools-mobile-fixed', this.toolsFixed)
@@ -38,23 +46,23 @@ export default {
   computed: {
     getCategories () {
       return this.lab.categories.length ? this.lab.categories : false
+    },
+    getToolsStyle () {
+      return this.toolsStyle
     }
   },
   methods: {
     toolsAbs () {
-      const tools = this.$s('.tools')
-      tools.style.position = 'static'
-      tools.style.top = 'auto'
-      tools.style.left = 'auto'
-      tools.style.right = 'auto'
+      this.toolsStyle.position = null
+      this.toolsStyle.top = null
+      this.toolsStyle.left = null
+      this.toolsStyle.right = null
     },
     toolsFixed () {
-      const tools = this.$s('.tools')
-      const toolbar = this.$s('.toolbar')
-      tools.style.position = 'fixed'
-      tools.style.top = getComputedStyle(toolbar, null).getPropertyValue('height')
-      tools.style.left = '0'
-      tools.style.right = '0'
+      this.toolsStyle.position = 'fixed'
+      this.toolsStyle.top = getComputedStyle(this.$s('.toolbar'), null).getPropertyValue('height')
+      this.toolsStyle.left = '0'
+      this.toolsStyle.right = '0'
     }
   }
 }
@@ -79,12 +87,25 @@ export default {
       padding-bottom: 5px
   .tools
     background: #FFF
+    padding: 5px 0
     margin-bottom: 40px
     box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.16), 0 2px 3px 0 rgba(0, 0, 0, 0.26)
     & .flex-center
       display: flex
       justify-content: flex-start
       align-items: center
+    & .views
+      padding-left: 20px
+      margin-right: 15px
+    & .bookmark
+      margin-left: 6px
+    & .contact-btn
+      margin-right: 15px
+      border-radius: 20px
+      font-weight: bold
+      height: auto
+      padding: 5px 10px
+      font-size: 1.05rem
   .contents
     color: #616161
     padding: 0 20px
@@ -96,4 +117,7 @@ export default {
       line-height: 2.0
       letter-spacing: 0.7px
       font-size: 0.95rem
+  .categories
+    padding-left: 20px
+    padding-bottom: 40px
 </style>

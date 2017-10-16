@@ -1,8 +1,9 @@
 <template lang="pug">
-  v-container(fluid class="result-container")
+  v-container(fluid class="result__container" :style="getContainerStyle")
     div(class="loading" v-if="isLoadMore")
       v-progress-circular(indeterminate v-bind:size="65" :width="4")
     MobileFilter(v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm" :items="filterItems")
+    DesktopFilter(v-if="$vuetify.breakpoint.md || $vuetify.breakpoint.lg || $vuetify.breakpoint.xl" :items="filterItems")
     template(v-for="lab in result")
       Card(:lab="lab")
     v-btn(@click="loadMore" :disabled="isLoadable") 더 보기
@@ -22,7 +23,13 @@ export default {
     Card
   },
   data: () => ({
-    isLoadMore: false
+    isLoadMore: false,
+    containerStyle: {
+      paddingTop: '0',
+      paddingBottom: '0',
+      paddingRight: '0',
+      paddingLeft: '0'
+    }
   }),
   async asyncData ({req, res, query}) {
     const resp = await request({path: `labs/?${queryString.stringify(query)}&offset=0&limit=15`})
@@ -56,13 +63,9 @@ export default {
       filterItems: Object.assign({}, items)
     }
   },
-  async mounted () {
-    await this.$vuetify.load(this.init)
-  },
-  beforeDestroy () {
-    const toolbar = this.$s('.toolbar')
-    toolbar.style.boxShadow = '0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)'
-    toolbar.style.border = '0 none'
+  mounted () {
+    this.$eventBus.$emit('toolbar-noBoxShadow')
+    this.$eventBus.$emit('loading-off')
   },
   computed: {
     getResult () {
@@ -76,18 +79,12 @@ export default {
       } else {
         return false
       }
+    },
+    getContainerStyle () {
+      return this.containerStyle
     }
   },
   methods: {
-    init () {
-      const toolbar = this.$s('.toolbar')
-      const result = this.$s('.result-container')
-      toolbar.style.boxShadow = 'none'
-      toolbar.style.borderBottom = '1px solid #e6e6e6'
-      result.style.padding = '0'
-      result.style.paddingTop = getComputedStyle(toolbar, null).getPropertyValue('height')
-      this.$eventBus.$emit('loading-off')
-    },
     async loadMore () {
       this.isLoadMore = true
       const resp = await request({path: `labs/?${queryString.stringify(this.$route.query)}&offset=${this.range.from}&limit=${this.range.limit}`})
@@ -103,3 +100,11 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .toolbar__no__shadow
+    box-shadow: none
+    border-bottom: 1px solid #E6E6E6
+  .result__container
+    margin-top: 57px
+    padding: auto 0 0 0
+</style>

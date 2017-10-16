@@ -1,12 +1,10 @@
-main
-  opacity: 0
-  transition: opacity .1s linear
-
-.toolbar
-  opacity: 0
-
-.toolbar--fixed
-  z-index: 99
+.result-container
+  @media (min-width: 1265px) and (max-width: 1904px)
+    margin: 0 auto
+    max-width: 1120px !important
+  @media (min-width: 1905px)
+    margin: 0 auto
+    max-width: 1440px !important
 
 .search
   & .arrow, & .option
