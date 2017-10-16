@@ -16,7 +16,7 @@
           span.expansion--text--views {{ `${lab.views} views` }}
           span {{ lab.numLikers }}
           v-btn(icon @click.stop="toggleBookmark")
-            v-icon(class="expansion--icon--bookmark") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+            v-icon(color="error") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
         v-layout(row wrap class="expansion--tag--container")
           template(v-for="tag in lab.keywords" v-if="lab.keywords.length")
             span.tag {{ `#${tag.name}` }}
@@ -124,8 +124,6 @@ export default {
 
   .expansion--text--views
     margin-right: 18px
-  .expansion--icon--bookmark
-    color: #f66a29 !important
   .expansion--tag--container
     padding: 5px 16px
     background: #e8e8e8

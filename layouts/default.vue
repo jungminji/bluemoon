@@ -35,11 +35,17 @@
           if (this.$route.name === 'result') {
             this.$eventBus.$emit('filter-mobile-absolute')
           }
+          if (this.$route.name === 'lab-id') {
+            this.$eventBus.$emit('tools-mobile-absolute')
+          }
         }
         if (window.scrollY >= 75) {
           this.$eventBus.$emit('toolbar-fixed')
           if (this.$route.name === 'result') {
             this.$eventBus.$emit('filter-mobile-fixed')
+          }
+          if (this.$route.name === 'lab-id') {
+            this.$eventBus.$emit('tools-mobile-fixed')
           }
         }
         if (window.scrollY < 150) {

@@ -1,13 +1,19 @@
 <template lang="pug">
-  v-container(v-cloak fluid class="lab-container")
-    pre {{ getLab }}
-    pre {{ getInterview }}
+  v-container(fluid v-cloak class="lab")
+    Mobile(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm")
+    Desktop(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.md || $vuetify.breakpoint.lg || $vuetify.breakpoint.xl")
 </template>
 <script>
+import Mobile from '~/components/lab/mobile'
+import Desktop from '~/components/lab/Desktop'
 import request from '~/assets/request.js'
 
 export default {
   name: 'lab',
+  components: {
+    Mobile,
+    Desktop
+  },
   async asyncData ({req, res, params, redirect}) {
     const { data } = await request({path: `labs/${params.id}`, version: 3})
     const resp = await request({path: `labs/${encodeURIComponent(data.lab.department.institution.name)}/${encodeURIComponent(data.lab.department.name)}/${encodeURIComponent(data.lab.name)}/interviews`})
@@ -32,6 +38,10 @@ export default {
   mounted () {
     this.$vuetify.load(() => {
       this.$eventBus.$emit('loading-off')
+      const toolbar = this.$s('.toolbar')
+      const lab = this.$s('.lab')
+      lab.style.padding = '0'
+      lab.style.paddingTop = getComputedStyle(toolbar, null).getPropertyValue('height')
     })
   },
   computed: {
@@ -44,9 +54,4 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
-  .lab-container
-    padding: 0
-    padding-top: 100px
-</style>
 
