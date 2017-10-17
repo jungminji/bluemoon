@@ -121,10 +121,46 @@ export default {
   },
   methods: {
     init () {
-      this.filterAbs()
       if (window.scrollY >= 100) {
         this.filterFixed()
+      } else {
+        this.filterAbs()
       }
+      this.initValue()
+    },
+    async initValue () {
+      const query = this.$route.query
+      const model = this.model
+      const ph = this.placeholder
+      if (query.superCategory) {
+        this.by = '연구별'
+        model.category = query.superCategory
+        ph.category = query.superCategory
+        await this.requestSubCategory(query.superCategory)
+        if (query.category) {
+          model.subCategory = query.category
+          ph.subCategory = query.category
+        }
+        return
+      }
+      if (query.institution) {
+        this.by = '학교별'
+        model.institution = query.institution
+        ph.institution = query.institution
+        await this.requestDepartment(query.institution)
+        if (query.department) {
+          model.department = query.department
+          ph.department = query.department
+        }
+        return
+      }
+      if (query.professor) {
+        this.by = '교수님'
+        model.professor = query.professor
+        ph.professor = query.professor
+        return
+      }
+      // if above condition all fails
       this.by = '학교별'
     },
     async requestDepartment (institution) {
