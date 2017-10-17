@@ -24,8 +24,6 @@
             span.tag 키워드가 존재하지 않습니다.
 </template>
 <script>
-// import request from '../assets/request'
-// import queryString from 'querystring'
 
 export default {
   name: 'card',

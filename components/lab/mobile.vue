@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  name: 'lab-mobile-view',
+  name: 'lab-mobile',
   props: ['lab', 'interview'],
   mounted () {
     this.$vuetify.load(this.init)

@@ -104,13 +104,6 @@ export default {
     background: #FFF
     z-index: 60
 
-  .toolbar__content__width
-    margin: 0 auto
-    @media (min-width: 1265px) and (max-width: 1904px)
-      max-width: 1120px !important
-    @media (min-width: 1905px)
-      max-width: 1440px !important
-
   .toolbar__btn
     color: #616161
     font-weight: bold

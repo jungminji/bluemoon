@@ -21,3 +21,16 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+.loading
+  position: fixed
+  z-index: 99
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background: rgba(#FFF, 1)
+  display: flex
+  justify-content: center
+  align-items: center
+</style>

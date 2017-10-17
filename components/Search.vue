@@ -3,7 +3,7 @@
     h1(class="sr-only") 연구소 검색 도구
     v-layout(row justify-center)
       h2(class="search-welcome") 다양한 방법으로&nbsp;
-        span(class="text--bold") 연구실
+        span(class="bold") 연구실
         | &nbsp;을 찾아보세요!
     v-layout(row)
       v-flex(xs4 class="text-xs-right")
@@ -99,10 +99,9 @@ export default {
   },
   methods: {
     init () {
-      const labels = this.$sa('.search__container label')
       this.$addClass(this.$sa('.btn__option')[0], 'white__border__bottom')
-      labels.forEach((label) => {
-        this.$addClass(label, 'label__text__color')
+      this.$sa('.search__container label').forEach((el) => {
+        this.$addClass(el, 'label__text__color')
       })
     },
     toLeft () {
@@ -238,7 +237,7 @@ export default {
 
   .search__container
     padding-top: 80px
-    max-width: 50%
+    max-width: 40%
     flex: none
     & .btn__option
       min-width: auto
@@ -251,6 +250,8 @@ export default {
         border-color: #FFF
     @media (max-width: 600px)
       max-width: 87.5%
+    @media (min-width: 601px) and (max-width: 960px)
+      max-width: 55%
     & .label__text__color
       color: #616161 !important
 
@@ -258,6 +259,8 @@ export default {
     color: #FFF
     letter-spacing: 0.8px
     font-size: 1rem
+    & .bold
+      font-weight: bold
 
   .animation
     cursor: pointer
@@ -281,16 +284,22 @@ export default {
     justify-content: center
 
   .slide-container
-    max-height: 195px
     overflow: hidden
+    display: flex
+    align-items: center
+    justify-content: center
 
   .slide
     min-height: 180px
-    margin-bottom: 30px
+    flex-basis: 100%
     background: #FFF
     padding: 16px
     border-radius: 10px
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26)
+    @media (max-width: 330px)
+      max-width: 190px
+    @media (min-width: 1905px)
+      padding: 45px 20px
 
   .submit, .reset
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26), 0 2px 10px 0 rgba(0, 0, 0, 0.16)

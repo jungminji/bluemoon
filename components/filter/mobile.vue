@@ -36,7 +36,7 @@ import request from '~/assets/request.js'
 import queryString from 'querystring'
 
 export default {
-  name: 'filter',
+  name: 'filter-mobile',
   props: {
     items: Object
   },
@@ -144,6 +144,7 @@ export default {
       if (window.scrollY >= 100) {
         this.filterFixed()
       }
+      this.$removeClass(this.$s('.result__container'), 'desktop__filter__abs')
     },
     onScroll () {
       if (window.scrollY < 100) {

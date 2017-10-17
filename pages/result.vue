@@ -98,4 +98,12 @@ export default {
   .result__container
     margin-top: 57px
     padding: auto 0 0 0
+    @media (min-width: 1265px) and (max-width: 1904px)
+      margin: 57px auto
+      max-width: 1120px !important
+    @media (min-width: 1905px)
+      margin: 57px auto
+      max-width: 1440px !important
+    &.desktop__filter__abs
+      margin: 145px auto 57px auto !important
 </style>
