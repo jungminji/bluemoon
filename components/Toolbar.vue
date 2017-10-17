@@ -103,7 +103,8 @@ export default {
   .toolbar
     background: #FFF
     z-index: 60
-
+  .toolbar__items
+    margin-right: 0 !important
   .toolbar__btn
     color: #616161
     font-weight: bold

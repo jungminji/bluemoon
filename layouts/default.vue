@@ -22,13 +22,13 @@
     },
     methods: {
       onScroll () {
-        if (window.scrollY < 100) {
+        if (window.scrollY <= 100) {
           this.$eventBus.$emit('toolbar-absolute')
         }
         if (window.scrollY >= 100) {
           this.$eventBus.$emit('toolbar-fixed')
         }
-        if (window.scrollY < 150) {
+        if (window.scrollY <= 150) {
           this.$eventBus.$emit('scrollToTop-off')
         }
         if (window.scrollY >= 150) {

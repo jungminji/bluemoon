@@ -8,9 +8,15 @@
       v-flex(xs7 class="flex-center")
         span(class="views") {{ lab.views }} Views
         span 북마크 {{ lab.numLikers }}
-        v-icon(color="error" class="bookmark") bookmark_border
+        v-icon(@click="bookmark" color="error" class="bookmark") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+        v-dialog(v-model="requireLogin")
+          v-card
+            v-card-title 로그인을 해주세요!
       v-flex(xs5 class="text-xs-right")
-        v-btn(color="primary" class="contact-btn") 컨택하기
+        v-btn(@click.stop="contact = true" color="primary" class="contact-btn") 컨택하기
+        v-dialog(v-model="contact")
+          v-card
+            v-card-title 컨택하기 dialog
     v-layout(column class="contents")
       h1(class="contents-header") 랩 간단 요약
       p(class="contents-p") {{ lab.description || '해당 정보가 존재하지 않습니다.' }}
@@ -31,12 +37,19 @@
 export default {
   name: 'lab-mobile',
   props: ['lab', 'interview'],
+  data: () => ({
+    requireLogin: false,
+    contact: false
+  }),
   mounted () {
     this.$vuetify.load(this.init)
   },
   computed: {
     getCategories () {
       return this.lab.categories.length ? this.lab.categories : false
+    },
+    getUserLoggedIn () {
+      return false
     }
   },
   methods: {
@@ -58,6 +71,13 @@ export default {
     },
     toolsFixed () {
       this.$addClass(this.$s('.tools'), 'fixed')
+    },
+    bookmark () {
+      if (this.getUserLoggedIn) {
+        console.log('execute when user is logged in')
+      } else {
+        this.requireLogin = true
+      }
     }
   }
 }

@@ -15,8 +15,11 @@
         div(slot="header")
           span.expansion--text--views {{ `${lab.views} views` }}
           span {{ lab.numLikers }}
-          v-btn(icon @click.stop="toggleBookmark")
+          v-btn(icon @click.stop="bookmark")
             v-icon(color="error") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+          v-dialog(v-model="requireLogin")
+            v-card
+              v-card-title 로그인을 해주세요!
         v-layout(row wrap class="expansion--tag--container")
           template(v-for="tag in lab.keywords" v-if="lab.keywords.length")
             span.tag {{ `#${tag.name}` }}
@@ -29,6 +32,14 @@ export default {
   name: 'card',
   props: {
     lab: Object
+  },
+  data: () => ({
+    requireLogin: false
+  }),
+  computed: {
+    isUserLoggedIn () {
+      return false
+    }
   },
   methods: {
     selectLab () {
@@ -44,7 +55,12 @@ export default {
       }
       cardRoot.classList.add(activeClass)
     },
-    async toggleBookmark () {
+    async bookmark () {
+      if (this.isUserLoggedIn) {
+        console.log('execute if user loggedin')
+      } else {
+        this.requireLogin = true
+      }
       // if(this.getUser.isLoggedIn) {
       //   this.lab.liked = !this.lab.liked
 

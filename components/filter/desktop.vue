@@ -59,6 +59,13 @@ export default {
     this.$vuetify.load(this.init)
   },
   watch: {
+    by () {
+      this.$nextTick(() => {
+        this.$sa('.list__tile--disabled .list__tile__title').forEach((el) => {
+          el.innerHTML = '<div>검색 결과가 없습니다.</div>'
+        })
+      })
+    },
     async 'model.institution' (nVal, oVal) {
       const model = this.model
       const ph = this.placeholder
