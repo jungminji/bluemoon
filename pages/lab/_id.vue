@@ -5,7 +5,7 @@
 </template>
 <script>
 import Mobile from '~/components/lab/mobile'
-import Desktop from '~/components/lab/Desktop'
+import Desktop from '~/components/lab/desktop'
 import request from '~/assets/request.js'
 
 export default {
