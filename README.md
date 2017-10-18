@@ -1,4 +1,4 @@
-# nuxt-final
+# bluemoon
 
 > Nuxt.js + Vuetify.js project
 
@@ -18,5 +18,3 @@ $ npm start
 # generate static project
 $ npm run generate
 ```
-
-For detailed explanation on how things work, check out the [Nuxt.js](https://github.com/nuxt/nuxt.js) and [Vuetify.js](https://vuetifyjs.com/) documentation.

@@ -1,10 +1,5 @@
-// Import custom theme
 @require './theme.styl'
-
-// Import Vuetify styling
 @require '~vuetify/src/stylus/main.styl'
-
-@require './post.render.styl'
 
 .page
   @extend .fade-transition
@@ -27,3 +22,19 @@ html, body
 
 a
   text-decoration: none
+
+.toolbar__content__width
+  margin: 0 auto
+  @media (min-width: 1265px) and (max-width: 1904px)
+    max-width: 1120px + 40px !important
+  @media (min-width: 1905px)
+    max-width: 1440px + 45px !important
+
+
+.search__container
+  & .arrow, & .btn__option
+    & .btn__content
+      &:before
+        display: none
+    & .ripple__container
+      display: none

@@ -11,11 +11,11 @@
         v-icon fa-chevron-up
       h1(class="newlab-headline") 새 연구실 등록
       p(class="newlab-text") 연구실이 등록되어 있지 않으신가요? 1분 만에 연구실을 등록해보세요. 우수한 이공계 인재들이 당신의 연구실을 볼 수 있습니다!
-      v-btn(primary class="newlab-btn" nuxt to="/newlab") 지금 등록하기
+      v-btn(color="primary" class="newlab-btn" nuxt to="/newlab") 지금 등록하기
 </template>
 <script>
 import request from '~/assets/request.js'
-import Search from '~/components/Search'
+import Search from '~/components/search'
 
 export default {
   components: {
@@ -46,10 +46,13 @@ export default {
       items
     }
   },
+  mounted () {
+    this.$eventBus.$emit('toolbar-boxShadow')
+    this.$eventBus.$emit('loading-off')
+  },
   methods: {
     toNewLab () {
-      const newlab = this.$s('#newlab')
-      this.$SmoothScroll(newlab)
+      this.$SmoothScroll(this.$s('#newlab'))
     },
     toTop () {
       this.$SmoothScroll(0)

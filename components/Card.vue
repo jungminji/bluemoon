@@ -15,8 +15,11 @@
         div(slot="header")
           span.expansion--text--views {{ `${lab.views} views` }}
           span {{ lab.numLikers }}
-          v-btn(icon @click.stop="toggleBookmark")
-            v-icon(class="expansion--icon--bookmark") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+          v-btn(icon @click.stop="bookmark")
+            v-icon(color="error") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+          v-dialog(v-model="requireLogin")
+            v-card
+              v-card-title 로그인을 해주세요!
         v-layout(row wrap class="expansion--tag--container")
           template(v-for="tag in lab.keywords" v-if="lab.keywords.length")
             span.tag {{ `#${tag.name}` }}
@@ -24,17 +27,22 @@
             span.tag 키워드가 존재하지 않습니다.
 </template>
 <script>
-// import request from '../assets/request'
-// import queryString from 'querystring'
 
 export default {
   name: 'card',
   props: {
     lab: Object
   },
+  data: () => ({
+    requireLogin: false
+  }),
+  computed: {
+    isUserLoggedIn () {
+      return false
+    }
+  },
   methods: {
     selectLab () {
-      this.$eventBus.$emit('loading-on')
       this.$router.push(`lab/${this.lab.uniqueName}`)
     },
     toggleBorder () {
@@ -47,7 +55,12 @@ export default {
       }
       cardRoot.classList.add(activeClass)
     },
-    async toggleBookmark () {
+    async bookmark () {
+      if (this.isUserLoggedIn) {
+        console.log('execute if user loggedin')
+      } else {
+        this.requireLogin = true
+      }
       // if(this.getUser.isLoggedIn) {
       //   this.lab.liked = !this.lab.liked
 
@@ -125,8 +138,6 @@ export default {
 
   .expansion--text--views
     margin-right: 18px
-  .expansion--icon--bookmark
-    color: #f66a29 !important
   .expansion--tag--container
     padding: 5px 16px
     background: #e8e8e8

@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-toolbar(:absolute="toolbar.type.prominent" :fixed="toolbar.type.fixed" v-resize="onResize")
+  v-toolbar(:absolute="type.absolute" :fixed="type.fixed")
     v-toolbar-title
       nuxt-link(to="/")
         img(:src="getBrand" :alt="getBrandAlt" :style="brand.style")
@@ -23,21 +23,27 @@ export default {
         marginLeft: `4.2px`
       }
     },
-    toolbar: {
-      type: {
-        prominent: true,
-        fixed: false
-      }
+    type: {
+      absolute: true,
+      fixed: false
     }
   }),
   mounted () {
     this.$eventBus.$on('toolbar-fixed', this.fixedToolbar)
     this.$eventBus.$on('toolbar-absolute', this.absToolbar)
+    this.$eventBus.$on('toolbar-noBoxShadow', this.noBoxShadowToolbar)
+    this.$eventBus.$on('toolbar-boxShadow', this.boxShadowToolbar)
     this.$vuetify.load(this.init)
+  },
+  beforeDestroy () {
+    this.$eventBus.$off('toolbar-fixed')
+    this.$eventBus.$off('toolbar-absolute')
+    this.$eventBus.$off('toolbar-noBoxShadow')
+    this.$eventBus.$off('toolbar-boxShadow')
   },
   computed: {
     getBrand () {
-      return this.toolbar.type.fixed ? this.brand.white : this.brand.normal
+      return this.type.fixed ? this.brand.white : this.brand.normal
     },
     getBrandAlt () {
       return this.brand.alt
@@ -45,58 +51,70 @@ export default {
   },
   methods: {
     init () {
-      const main = this.$s(`main`)
-      const toolbarBtns = this.$sa(`.toolbar button`)
-
-      main.style.opacity = `1`
+      const toolbarBtns = this.$sa('.toolbar .btn')
+      this.$addClass(this.$s('.toolbar__content'), 'toolbar__content__width')
       toolbarBtns.forEach((btn) => {
-        btn.style.color = `#616161`
-        btn.style.fontWeight = `600`
+        this.$addClass(btn, 'toolbar__btn')
       })
-      this.onResize()
-    },
-    onResize () {
-      const toolbar = this.$s(`.toolbar`)
-      const toolbarContent = this.$s(`.toolbar__content`)
-      const breakpoint = this.$vuetify.breakpoint
-
-      if (breakpoint.lg) {
-        toolbarContent.style.margin = `0 auto`
-        toolbarContent.style.maxWidth = `1120px`
-      }
-      if (breakpoint.xl) {
-        toolbarContent.style.margin = `0 auto`
-        toolbarContent.style.maxWidth = `1440px`
-      }
-      toolbar.style.background = `#FFF`
-      toolbar.style.opacity = `1`
     },
     fixedToolbar () {
-      const toolbar = this.$s(`.toolbar`)
-      const toolbarType = this.toolbar.type
       const toolbarBtns = this.$sa(`.toolbar a.btn`)
-
-      toolbar.style.background = `#29B6F6`
-      toolbarType.prominent = false
-      toolbarType.fixed = true
-
+      this.$addClass(this.$s('.toolbar'), 'toolbar__fixed')
+      this.hasType('fixed')
       toolbarBtns.forEach((btn) => {
-        btn.style.color = `#FFF`
+        this.$addClass(btn, 'white')
       })
+      if (this.$route.name === 'result' || this.$route.name === 'lab-id') {
+        this.$addClass(this.$s('.toolbar'), 'toolbar__no-box-shadow')
+      }
     },
     absToolbar () {
-      const toolbar = this.$s(`.toolbar`)
-      const toolbarType = this.toolbar.type
       const toolbarBtns = this.$sa(`.toolbar a.btn`)
-
-      toolbar.style.background = `#FFF`
-      toolbarType.prominent = true
-      toolbarType.fixed = false
-
+      this.$removeClass(this.$s('.toolbar'), 'toolbar__fixed')
+      this.hasType('absolute')
       toolbarBtns.forEach((btn) => {
-        btn.style.color = `#616161`
+        this.$removeClass(btn, 'white')
       })
+      if (this.$route.name === 'result' || this.$route.name === 'lab-id') {
+        this.$addClass(this.$s('.toolbar'), 'toolbar__no-box-shadow')
+      }
+    },
+    noBoxShadowToolbar () {
+      this.$addClass(this.$s('.toolbar'), 'toolbar__no-box-shadow')
+    },
+    boxShadowToolbar () {
+      this.$removeClass(this.$s('.toolbar'), 'toolbar__no-box-shadow')
+    },
+    hasType (type) {
+      if (type === 'fixed') {
+        this.type.absolute = false
+        this.type.fixed = true
+        return
+      }
+      if (type === 'absolute') {
+        this.type.absolute = true
+        this.type.fixed = false
+      }
     }
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .toolbar
+    background: #FFF
+    z-index: 60
+  .toolbar__items
+    margin-right: 0 !important
+  .toolbar__btn
+    color: #616161
+    font-weight: bold
+    &.white
+      color: #FFF !important
+
+  .toolbar__fixed
+    background: #29B6F6 !important
+
+  .toolbar__no-box-shadow
+    box-shadow: none !important
+    border-bottom: 1px solid #E6E6E6 !important
+</style>

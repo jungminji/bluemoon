@@ -1,19 +1,23 @@
 <template lang="pug">
-  v-container(fluid class="lab-container")
-    pre {{ getLab }}
-    pre {{ getInterview }}
+  v-container(fluid v-cloak class="lab__container pa-0")
+    Mobile(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm")
+    //- Desktop(:lab="getLab" :interview="getInterview" v-if="$vuetify.breakpoint.md || $vuetify.breakpoint.lg || $vuetify.breakpoint.xl")
 </template>
 <script>
+import Mobile from '~/components/lab/mobile'
+import Desktop from '~/components/lab/Desktop'
 import request from '~/assets/request.js'
 
 export default {
   name: 'lab',
-  async asyncData ({req, res, params}) {
+  components: {
+    Mobile,
+    Desktop
+  },
+  async asyncData ({req, res, params, redirect}) {
     const { data } = await request({path: `labs/${params.id}`, version: 3})
     const resp = await request({path: `labs/${encodeURIComponent(data.lab.department.institution.name)}/${encodeURIComponent(data.lab.department.name)}/${encodeURIComponent(data.lab.name)}/interviews`})
-
     const model = []
-
     resp.data.interviews.forEach((interview) => {
       interview.interviewQuestions.forEach((question) => {
         const answers = []
@@ -26,14 +30,13 @@ export default {
         })
       })
     })
-
     return {
       lab: data.lab,
       interview: model
     }
   },
   mounted () {
-    // Loading is on when selecting a Card from result page
+    this.$eventBus.$emit('toolbar-noBoxShadow')
     this.$eventBus.$emit('loading-off')
   },
   computed: {
@@ -47,8 +50,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-  .lab-container
-    padding: 0
-    padding-top: 100px
+.lab__container
+  margin-top: 57px
 </style>
 
