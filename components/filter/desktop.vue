@@ -18,10 +18,10 @@
         v-select(label="교수님" :placeholder="placeholder.professor" :items="items.professor" v-model="model.professor")
       
       v-flex(class="btn__container")
-        v-btn(@click="reset" class="btn__reset")
+        v-btn(@click="reset" class="btn__reset" round)
           v-icon(color="error") refresh
           span 초기화
-        v-btn(@click="submit" class="btn__submit" color="primary")
+        v-btn(@click="submit" class="btn__submit" color="primary" round)
           v-icon search
           span 지금 찾기 
 </template>
@@ -261,7 +261,6 @@ export default {
   justify-content: center
   & .btn__reset, & .btn__submit
     font-weight: 600
-    border-radius: 20px
   & .btn__reset
     background: #FFF !important
     color: #F66A29

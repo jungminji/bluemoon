@@ -26,10 +26,12 @@
         p(class="contents-p") {{ n.answer }}
       template(v-if="!interview.length")
         p(class="contents-p") 인터뷰 정보가 없습니다.
+    v-layout(column class="categories__header")
+      h1(class="heading") 분류
     v-layout(row wrap class="categories")
-      template(v-for="n in getCategories")
-        span {{ n.superCategory.name }}
-        span {{ n.name }}
+      div(v-for="n in getCategories" class="categories__item")
+        span(class="categories__item__category") {{ n.superCategory.name }}
+        span(class="categories__item__subcat") {{ n.name }}
       template(v-if="!getCategories")
         p(class="contents-p") 분류 정보가 없습니다.
 </template>
@@ -86,7 +88,7 @@ export default {
   .color-primary
     background: #29b6f6
     color: #FFF
-    padding: 30px 0 70px 20px
+    padding: 30px 20px 70px 20px
     & .inst-dep, & .lab-professor
       font-size: 0.95rem
       letter-spacing: 0.6px
@@ -129,15 +131,47 @@ export default {
   .contents
     color: #616161
     padding: 0 20px
+    margin-top: 20px
     & .contents-header
       font-size: 1.2rem
       font-weight: bold
       letter-spacing: 0.5px
+      line-height: 1.3
     & .contents-p
       line-height: 2.0
       letter-spacing: 0.7px
       font-size: 0.95rem
-  .categories
-    padding-left: 20px
-    padding-bottom: 40px
+
+
+.categories__header
+  color: #616161
+  padding: 0 20px
+  margin-top: 30px
+  & .heading
+    font-size: 1.2rem
+    font-weight: bold
+    letter-spacing: 0.5px
+.categories
+  padding-left: 20px
+  padding-bottom: 40px
+  & .categories__item
+    display: flex
+    margin-right: 10px
+    margin-bottom: 7px
+    & .categories__item__category, .categories__item__subcat
+      font-weight: bold
+      font-size: 1rem
+      display: block
+      padding: 3px 8px
+      border: 1px solid #01579b
+    & .categories__item__category
+      color: #FFF
+      background: #01579b
+      border-top-left-radius: 20px
+      border-bottom-left-radius: 20px
+    & .categories__item__subcat
+      color: #01579b
+      border-top-right-radius: 20px
+      border-bottom-right-radius: 20px
+
 </style>

@@ -23,10 +23,10 @@
       v-select(label="교수님" :items="items.professor" v-if="byProfessor" v-model="model.professor" :placeholder="placeholder.professor")
 
       v-layout(row wrap)
-        v-btn(@click="reset")
+        v-btn(@click="reset" class="btn__reset" round)
           v-icon refresh
           span 초기화
-        v-btn(@click="submit" color="primary")
+        v-btn(@click="submit" class="btn__submit" color="primary" round)
           v-icon search
           span 지금 찾기
     v-layout(class="cover-result" v-if="isOpen")        
@@ -297,5 +297,11 @@ export default {
     border-bottom: 2px solid transparent
     &.active
       border-color: #616161
+  .btn__submit, .btn__reset
+    font-weight: bold
+  .btn__reset
+    background: #FFF !important
+    color: #F66A29
+    border: 1px solid #F66A29
 </style>
 
