@@ -16,7 +16,7 @@
           span.expansion--text--views {{ `${lab.views} views` }}
           span {{ lab.numLikers }}
           v-btn(icon @click.stop="bookmark")
-            v-icon(color="error") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+            v-icon(color="error") {{ lab.liked ? 'fa-heart' : 'fa-heart-o' }}
           v-dialog(v-model="requireLogin")
             v-card
               v-card-title 로그인을 해주세요!

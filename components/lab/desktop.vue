@@ -10,7 +10,7 @@
           p(class="views") 조회수 : {{ lab.views }} Views
           p(class="bookmark") 북마크 : {{ lab.numLikers }}
             v-btn(icon class="icon__bookmark")
-              v-icon(color="error") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+              v-icon(color="error") {{ lab.liked ? 'fa-heart' : 'fa-heart-o' }}
           v-btn(color="primary" round class="btn__contact") 컨택하기
     v-layout(row wrap)
       v-flex(xs9 class="contents")

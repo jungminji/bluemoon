@@ -8,7 +8,7 @@
       v-flex(xs7 class="flex-center")
         span(class="views") {{ lab.views }} Views
         span 북마크 {{ lab.numLikers }}
-        v-icon(@click="bookmark" color="error" class="bookmark") {{ lab.liked ? 'bookmark' : 'bookmark_border' }}
+        v-icon(@click="bookmark" color="error" class="bookmark") {{ lab.liked ? 'fa-heart' : 'fa-heart-o' }}
         v-dialog(v-model="requireLogin")
           v-card
             v-card-title 로그인을 해주세요!
