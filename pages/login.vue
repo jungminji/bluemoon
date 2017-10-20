@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container(fluid class="login-container" :style="setMaxWidth")
     v-layout
-      v-btn(class="facebook-login pt-2 pb-2")
+      v-btn(class="facebook-login pt-2 pb-2" @click="facebookLogin")
         v-icon(class="mr-2") fa-facebook-official
         | 페이스북으로 로그인
     v-layout(row wrap class="pt-4 pb-4")
@@ -17,7 +17,7 @@
       v-text-field(name="password" label="비밀번호" placeholder="********" min="8" v-model="password" type="password" required)
 
     v-layout(class="pt-1")
-      v-btn(class="login-btn") 로그인
+      v-btn(class="login-btn" @click="login") 로그인
     
     v-layout(column class="pt-5 text-xs-center")
       p(class="mb-1") 아직 회원이 아니세요?
@@ -57,6 +57,32 @@ export default {
         maxWidth
       }
     }
+  },
+  methods: {
+    async login () {
+      await this.$store.dispatch('user/login', {
+        email: this.username,
+        password: this.password
+      })
+      if (this.user.isLoggedIn) {
+        this.signin = false
+      } else {
+        this.loginError = true
+      }
+    },
+    facebookLogin () {
+      window.FB.login(response => {
+        if (response.authResponse) {
+          this.$store.dispatch('user/facebookLogin', {
+            accessToken: response.authResponse.accessToken
+          })
+          this.signin = false
+        } else {
+          this.loginError = true
+        }
+      }, this.params)
+    }
+
   }
 }
 </script>

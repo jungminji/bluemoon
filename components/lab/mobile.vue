@@ -16,7 +16,18 @@
         v-btn(@click.stop="contact = true" color="primary" class="contact-btn") 컨택하기
         v-dialog(v-model="contact")
           v-card
-            v-card-title 컨택하기 dialog
+            v-card-title
+              h2(class="contact__dialog__heading") 컨택하기
+            v-card-text
+              h5(class="contact__dialog__subheading") 교수님 이메일
+              template(v-for="prof in lab.professors")
+                a(:href="`mailto:${prof.email}`") {{ prof.email || '정보가 존재하지 않습니다' }}
+              h5(class="contact__dialog__subheading mt-2") 랩 홈페이지
+              a(:href="lab.website" target="_blank") {{ lab.website || '정보가 존재하지 않습니다' }}
+            v-card-actions
+              v-spacer
+              v-btn(round color="error" @click="contact = false" class="contact__dialog__btn__close") 닫기
+
     v-layout(column class="contents")
       h1(class="contents-header") 랩 간단 요약
       p(class="contents-p") {{ lab.description || '해당 정보가 존재하지 않습니다.' }}
@@ -174,4 +185,14 @@ export default {
       border-top-right-radius: 20px
       border-bottom-right-radius: 20px
 
+.contact__dialog__heading
+  color: #616161
+  font-size: 1.45rem
+  margin: 0
+.contact__dialog__subheading
+  color: #616161
+  margin: 0
+  font-size: 1.15rem
+.contact__dialog__btn__close
+  font-weight: bold
 </style>

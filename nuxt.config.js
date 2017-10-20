@@ -21,7 +21,8 @@ module.exports = {
   plugins: [
     '~/plugins/vuetify.js',
     '~/plugins/vue.smooth.scroll.js',
-    {src: '~/plugins/vue.prototype.js', ssr: false}],
+    '~/plugins/vue.prototype.js',
+    {src: '~/plugins/facebook.sdk.js', ssr: false}],
   css: [
     '~/assets/style/app.styl'
   ],
@@ -29,11 +30,11 @@ module.exports = {
   build: {
     vendor: [
       'babel-polyfill',
-      '~/plugins/vuetify.js',
+      'vuetify',
       'axios',
       'jwt-decode',
       'js-cookie',
-      '~/plugins/vue.smooth.scroll.js'
+      'vue-smoothscroll'
     ],
     extractCSS: true,
     /*

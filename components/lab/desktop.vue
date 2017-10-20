@@ -11,7 +11,20 @@
           p(class="bookmark") 북마크 : {{ lab.numLikers }}
             v-btn(icon class="icon__bookmark")
               v-icon(color="error") {{ lab.liked ? 'fa-heart' : 'fa-heart-o' }}
-          v-btn(color="primary" round class="btn__contact") 컨택하기
+          v-btn(@click.stop="contact = true" color="primary" round class="btn__contact") 컨택하기
+          v-dialog(v-model="contact")
+            v-card
+              v-card-title
+                h2(class="contact__dialog__heading") 컨택하기
+              v-card-text
+                h5(class="contact__dialog__subheading") 교수님 이메일
+                template(v-for="prof in lab.professors")
+                  a(:href="`mailto:${prof.email}`") {{ prof.email || '정보가 존재하지 않습니다' }}
+                h5(class="contact__dialog__subheading mt-2") 랩 홈페이지
+                a(:href="lab.website" target="_blank") {{ lab.website || '정보가 존재하지 않습니다' }}
+              v-card-actions
+                v-spacer
+                v-btn(round color="error" @click="contact = false" class="contact__dialog__btn__close") 닫기
     v-layout(row wrap)
       v-flex(xs9 class="contents")
         h1(class="contents-header") 랩 간단 요약
@@ -21,12 +34,29 @@
           p(class="contents-p") {{ n.answer }}
         template(v-if="!interview.length")
           p(class="contents-p") 인터뷰 정보가 없습니다.
-    v-flex(xs3 class="categories")
+      v-flex(xs3 class="categories")
+        div(class="categories__item")
+          h2(class="categories__heading") 분류
+          template(v-for="n in getCategories")
+            div
+              span(class="categories__item__category") {{ n.superCategory.name }}
+              span(class="categories__item__subcat") {{ n.name }}
+        template(v-if="!getCategories")
+          div(class="categories__item")
+            p(class="contents-p no__result") 분류 정보가 없습니다.
 </template>
 <script>
 export default {
   name: 'lab-desktop',
-  props: ['lab', 'interview']
+  props: ['lab', 'interview'],
+  data: () => ({
+    contact: false
+  }),
+  computed: {
+    getCategories () {
+      return this.lab.categories.length ? this.lab.categories : false
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -45,7 +75,7 @@ export default {
       padding-left: 20px
       color: #FFF
       background: #29B6F6
-      box-shadow: 0 2px 10px 0 rgba(#000, 0.16);
+      box-shadow: 0 2px 10px 0 rgba(0,0,0,.16), 0 2px 5px 0 rgba(0,0,0,.26)
       letter-spacing: 0.7px
       & .inst-dep
         font-size: 1.15rem
@@ -93,8 +123,54 @@ export default {
       line-height: 2.0
       letter-spacing: 0.7px
       font-size: 0.95rem
+
   .categories
-    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26)
-</style>
+    max-height: 200px
+    padding-top: 20px
+    padding-left: 20px
+    & .no__result
+      margin: 10px auto
+      color: #616161
+    & .categories__item
+      padding: 20px
+      display: flex
+      flex-wrap: wrap
+      box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26)
+      background: #FFF
+      & .categories__heading
+        color: #616161
+        font-size: 1.2rem
+        font-weight: bold
+        letter-spacing: 0.5px
+        flex-basis: 100%
+      & .categories__item__category, .categories__item__subcat
+        font-weight: bold
+        display: inline-block
+        font-size: 0.87rem
+        padding: 2px 6px
+        border: 1px solid #01579b
+      & .categories__item__category
+        color: #FFF
+        background: #01579b
+        border-top-left-radius: 20px
+        border-bottom-left-radius: 20px
+        margin-bottom: 5px
+      & .categories__item__subcat
+        color: #01579b
+        border-top-right-radius: 20px
+        border-bottom-right-radius: 20px
+        margin-right: 5px
+
+.contact__dialog__heading
+  color: #616161
+  font-size: 1.45rem
+  margin: 0
+.contact__dialog__subheading
+  color: #616161
+  margin: 0
+  font-size: 1.15rem
+.contact__dialog__btn__close
+  font-weight: bold
+  </style>
 
 
